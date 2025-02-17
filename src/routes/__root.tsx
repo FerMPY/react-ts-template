@@ -1,6 +1,12 @@
 import React from "react";
 
-import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
+import { QueryClient } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import {
+  createRootRouteWithContext,
+  Link,
+  Outlet,
+} from "@tanstack/react-router";
 
 const TanStackRouterDevtools =
   process.env.NODE_ENV === "production"
@@ -14,10 +20,12 @@ const TanStackRouterDevtools =
         })),
       );
 
-export const Route = createRootRoute({
+export const Route = createRootRouteWithContext<{
+  queryClient: QueryClient;
+}>()({
   component: () => (
     <>
-      <div className="flex gap-4 bg-blue-800 p-4 text-white shadow-md">
+      <div className="flex h-[60px] gap-4 bg-blue-800 p-4 text-white shadow-md">
         <Link
           to="/"
           className="transition-colors hover:text-blue-200 [&.active]:font-bold"
@@ -25,14 +33,17 @@ export const Route = createRootRoute({
           Home
         </Link>
         <Link
-          to="/about"
+          to="/demo"
           className="transition-colors hover:text-blue-200 [&.active]:font-bold"
         >
-          About
+          Demo
         </Link>
       </div>
-      <Outlet />
-      <TanStackRouterDevtools />
+      <main className="h-[calc(100vh-60px)] w-screen bg-gray-900 text-white">
+        <Outlet />
+      </main>
+      <ReactQueryDevtools buttonPosition="top-right" />
+      <TanStackRouterDevtools position="bottom-right" />
     </>
   ),
 });
