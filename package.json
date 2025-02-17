@@ -11,11 +11,11 @@
     "ci:test": "pnpm test",
     "dev": "vite",
     "format": "prettier --write .",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "prepare": "husky",
     "preview": "vite preview",
-    "test": "jest",
+    "test": "vitest run",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
