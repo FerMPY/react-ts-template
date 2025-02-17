@@ -70,31 +70,32 @@ pnpm dev
 .
 ├── eslint.config.js
 ├── index.html
+├── LICENCE
 ├── lint-staged.config.js
 ├── package.json
 ├── pnpm-lock.yaml
 ├── postcss.config.js
 ├── public
+│   ├── React-icon.svg
+│   ├── tailwind.png
+│   ├── tanstack.webp
+│   ├── typescript.svg
+│   └── vite.svg
 ├── README.md
 ├── scripts
 │   └── setup.ts
 ├── src
+│   ├── components
 │   ├── main.tsx
+│   ├── queries
 │   ├── routes
-│   │   ├── about.lazy.tsx
-│   │   ├── index.lazy.tsx
-│   │   └── __root.tsx
 │   ├── routeTree.gen.ts
 │   ├── styles
-│   │   └── index.css
 │   └── vite-env.d.ts
 ├── tailwind.config.ts
 ├── tests
 │   ├── setup.tsx
 │   └── utils
-│       └── render-with-router
-│           ├── index.tsx
-│           └── render-with-router.test.tsx
 ├── tsconfig.app.json
 ├── tsconfig.json
 ├── tsconfig.node.json
