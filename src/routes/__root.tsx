@@ -17,15 +17,20 @@ const TanStackRouterDevtools =
 export const Route = createRootRoute({
   component: () => (
     <>
-      <div className="flex gap-2 p-2">
-        <Link to="/" className="[&.active]:font-bold">
+      <div className="flex gap-4 bg-blue-800 p-4 text-white shadow-md">
+        <Link
+          to="/"
+          className="transition-colors hover:text-blue-200 [&.active]:font-bold"
+        >
           Home
         </Link>
-        <Link to="/about" className="[&.active]:font-bold">
+        <Link
+          to="/about"
+          className="transition-colors hover:text-blue-200 [&.active]:font-bold"
+        >
           About
         </Link>
       </div>
-      <hr />
       <Outlet />
       <TanStackRouterDevtools />
     </>

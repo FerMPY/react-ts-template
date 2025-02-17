@@ -149,7 +149,7 @@ While this template provides a solid foundation, you might find these additional
 ### ORMs
 
 [Prisma](https://www.prisma.io/): A powerful ORM for working with databases, enabling type-safe queries and schema migrations.
-[Drizzle(https://orm.drizzle.team/)]: A lightweight ORM alternative that offers a simpler API for SQL databases.
+[Drizzle](https://orm.drizzle.team/): A lightweight ORM alternative that offers a simpler API for SQL databases.
 
 ### Headless UI Components
 
