@@ -70,31 +70,32 @@ pnpm dev
 .
 ├── eslint.config.js
 ├── index.html
+├── LICENCE
 ├── lint-staged.config.js
 ├── package.json
 ├── pnpm-lock.yaml
 ├── postcss.config.js
 ├── public
+│   ├── React-icon.svg
+│   ├── tailwind.png
+│   ├── tanstack.webp
+│   ├── typescript.svg
+│   └── vite.svg
 ├── README.md
 ├── scripts
 │   └── setup.ts
 ├── src
+│   ├── components
 │   ├── main.tsx
+│   ├── queries
 │   ├── routes
-│   │   ├── about.lazy.tsx
-│   │   ├── index.lazy.tsx
-│   │   └── __root.tsx
 │   ├── routeTree.gen.ts
 │   ├── styles
-│   │   └── index.css
 │   └── vite-env.d.ts
 ├── tailwind.config.ts
 ├── tests
 │   ├── setup.tsx
 │   └── utils
-│       └── render-with-router
-│           ├── index.tsx
-│           └── render-with-router.test.tsx
 ├── tsconfig.app.json
 ├── tsconfig.json
 ├── tsconfig.node.json
@@ -149,7 +150,7 @@ While this template provides a solid foundation, you might find these additional
 ### ORMs
 
 [Prisma](https://www.prisma.io/): A powerful ORM for working with databases, enabling type-safe queries and schema migrations.
-[Drizzle(https://orm.drizzle.team/)]: A lightweight ORM alternative that offers a simpler API for SQL databases.
+[Drizzle](https://orm.drizzle.team/): A lightweight ORM alternative that offers a simpler API for SQL databases.
 
 ### Headless UI Components
 
