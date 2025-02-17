@@ -6,12 +6,16 @@
   "type": "module",
   "scripts": {
     "build": "tsc -b && vite build",
+    "ci": "pnpm run ci:lint && pnpm run ci:test",
+    "ci:lint": "pnpm lint",
+    "ci:test": "pnpm test",
     "dev": "vite",
     "format": "prettier --write .",
-    "lint": "eslint --fix",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "prepare": "husky",
     "preview": "vite preview",
-    "test": "vitest",
+    "test": "jest",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
