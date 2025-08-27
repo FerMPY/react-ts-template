@@ -10,68 +10,35 @@
 
 import { createFileRoute } from "@tanstack/react-router";
 
-// Import Routes
+import { Route as rootRouteImport } from "./routes/__root";
+import { Route as DemoRouteImport } from "./routes/demo";
 
-import { Route as rootRoute } from "./routes/__root";
-import { Route as DemoImport } from "./routes/demo";
+const IndexLazyRouteImport = createFileRoute("/")();
 
-// Create Virtual Routes
-
-const IndexLazyImport = createFileRoute("/")();
-
-// Create/Update Routes
-
-const DemoRoute = DemoImport.update({
+const DemoRoute = DemoRouteImport.update({
   id: "/demo",
   path: "/demo",
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any).lazy(() => import("./routes/demo.lazy").then((d) => d.Route));
-
-const IndexLazyRoute = IndexLazyImport.update({
+const IndexLazyRoute = IndexLazyRouteImport.update({
   id: "/",
   path: "/",
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any).lazy(() => import("./routes/index.lazy").then((d) => d.Route));
-
-// Populate the FileRoutesByPath interface
-
-declare module "@tanstack/react-router" {
-  interface FileRoutesByPath {
-    "/": {
-      id: "/";
-      path: "/";
-      fullPath: "/";
-      preLoaderRoute: typeof IndexLazyImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/demo": {
-      id: "/demo";
-      path: "/demo";
-      fullPath: "/demo";
-      preLoaderRoute: typeof DemoImport;
-      parentRoute: typeof rootRoute;
-    };
-  }
-}
-
-// Create and export the route tree
 
 export interface FileRoutesByFullPath {
   "/": typeof IndexLazyRoute;
   "/demo": typeof DemoRoute;
 }
-
 export interface FileRoutesByTo {
   "/": typeof IndexLazyRoute;
   "/demo": typeof DemoRoute;
 }
-
 export interface FileRoutesById {
-  __root__: typeof rootRoute;
+  __root__: typeof rootRouteImport;
   "/": typeof IndexLazyRoute;
   "/demo": typeof DemoRoute;
 }
-
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths: "/" | "/demo";
@@ -80,37 +47,34 @@ export interface FileRouteTypes {
   id: "__root__" | "/" | "/demo";
   fileRoutesById: FileRoutesById;
 }
-
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute;
   DemoRoute: typeof DemoRoute;
+}
+
+declare module "@tanstack/react-router" {
+  interface FileRoutesByPath {
+    "/demo": {
+      id: "/demo";
+      path: "/demo";
+      fullPath: "/demo";
+      preLoaderRoute: typeof DemoRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/": {
+      id: "/";
+      path: "/";
+      fullPath: "/";
+      preLoaderRoute: typeof IndexLazyRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+  }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   DemoRoute: DemoRoute,
 };
-
-export const routeTree = rootRoute
+export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>();
-
-/* ROUTE_MANIFEST_START
-{
-  "routes": {
-    "__root__": {
-      "filePath": "__root.tsx",
-      "children": [
-        "/",
-        "/demo"
-      ]
-    },
-    "/": {
-      "filePath": "index.lazy.tsx"
-    },
-    "/demo": {
-      "filePath": "demo.tsx"
-    }
-  }
-}
-ROUTE_MANIFEST_END */
