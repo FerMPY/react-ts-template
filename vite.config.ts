@@ -10,6 +10,7 @@ const isTest = process.env.NODE_ENV === "test";
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: process.env.NODE_ENV === "production" ? "/react-ts-template/" : "/",
   plugins: [
     tsconfigPaths(),
     react({
