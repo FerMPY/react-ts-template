@@ -173,8 +173,14 @@ While this template provides a solid foundation, you might find these additional
 
 ## ⚠️ Limitations and Known Issues
 
-- React 19 just released there could be dependency issues
+- React 19 just released, there could be dependency issues
 - Some features might be experimental, they are tested before benign added to the template but still be careful.
+
+## LLM Assisted Development
+
+Most of tanstack libraries work really well with LLMs, here is a quick link to how to setup the rules from their docs.
+
+[How to use LLM Rules with Tanstack Router](https://tanstack.com/router/latest/docs/framework/react/installation#llm-assistance-support)
 
 ---
 

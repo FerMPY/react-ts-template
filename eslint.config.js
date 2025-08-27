@@ -32,13 +32,11 @@ export default tseslint.config(
       globals: globals.browser,
     },
     plugins: {
-      //@ts-expect-error https://github.com/facebook/react/issues/28313
       "react-hooks": reactHooks,
       "react-refresh": reactRefresh,
       "react-compiler": reactCompiler,
       "simple-import-sort": simpleImportSort,
     },
-    // @ts-expect-error https://github.com/facebook/react/issues/28313
     rules: {
       ...reactHooks.configs.recommended.rules,
       "react-compiler/react-compiler": "error",
