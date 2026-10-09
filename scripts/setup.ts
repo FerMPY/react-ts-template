@@ -1,76 +1,71 @@
 #!/usr/bin/env node
+// Turns a fresh clone of the template into your own project:
+// renames the package, wipes the template's git history and makes an initial commit.
+// Usage: node scripts/setup.ts
 
-import { execSync } from "child_process";
-import fs from "fs";
-import readline from "readline";
+import { execFileSync } from "node:child_process";
+import { existsSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { basename } from "node:path";
+import { stdin as input, stdout as output } from "node:process";
+import { createInterface } from "node:readline/promises";
 
-// Helper to execute shell commands
-function execCommand(command: string) {
-  return execSync(command, { stdio: "inherit" });
+const rl = createInterface({ input, output });
+
+function git(...args: string[]) {
+  return execFileSync("git", args, { encoding: "utf8" }).trim();
 }
 
-// Helper to run a prompt
-async function prompt(question: string) {
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
-  return new Promise((resolve) =>
-    rl.question(question, (answer) => {
-      rl.close();
-      resolve(answer.trim());
-    }),
-  );
+function gitConfig(key: string) {
+  try {
+    return git("config", "--get", key);
+  } catch {
+    return "";
+  }
 }
 
 async function main() {
-  console.log(
-    "Cleaning up the .git folder to initialize a new Git repository...",
-  );
+  const defaultName = basename(process.cwd())
+    .toLowerCase()
+    .replaceAll(/[^a-z0-9-]/g, "-");
+  const name =
+    (await rl.question(`Project name (${defaultName}): `)) || defaultName;
 
-  // Check and remove existing .git folder
-  if (fs.existsSync(".git")) {
-    console.log("Removing .git folder...");
-    fs.rmSync(".git", { recursive: true, force: true });
+  const pkg = JSON.parse(readFileSync("package.json", "utf8"));
+  pkg.name = name;
+  pkg.version = "0.0.0";
+  writeFileSync("package.json", `${JSON.stringify(pkg, null, 2)}\n`);
+  console.log(`Renamed package to "${name}".`);
+
+  if (existsSync(".git")) {
+    console.log("Removing the template's git history...");
+    rmSync(".git", { recursive: true, force: true });
   }
+  git("init");
 
-  console.log("Initializing a new Git repository...");
-  execCommand("git init");
-
-  try {
-    // Check if Git user.name and user.email are set
-    const gitUserName = execSync("git config --get user.name")
-      .toString()
-      .trim();
-    const gitUserEmail = execSync("git config --get user.email")
-      .toString()
-      .trim();
-
+  if (!gitConfig("user.name") || !gitConfig("user.email")) {
     console.log(
-      `Git is already configured with:\n  Name: ${gitUserName}\n  Email: ${gitUserEmail}`,
+      "Git user information is not set. Let's set it up for this repository.",
     );
-  } catch {
-    // Prompt the user for their Git configuration
-    console.log("Git user information is not set. Let's set it up.");
-
-    const userName = await prompt("Enter your Git user name: ");
-    const userEmail = await prompt("Enter your Git email: ");
-
-    console.log("Setting up Git user information...");
-    execCommand(`git config user.name "${userName}"`);
-    execCommand(`git config user.email "${userEmail}"`);
+    git("config", "user.name", await rl.question("Git user name: "));
+    git("config", "user.email", await rl.question("Git email: "));
   }
 
-  console.log("Creating an initial commit...");
-  execCommand("git add .");
-  execCommand('git commit -m "Initial commit"');
+  git("add", ".");
+  git("commit", "-m", "Initial commit");
 
   console.log(
-    "All done! You can now link your own repository using 'git remote add origin <repo-url>'.",
+    "\nAll done! Link your own repository with: git remote add origin <repo-url>",
   );
 }
 
-main().catch((error) => {
-  console.error("An error occurred:", error.message);
-  process.exit(1);
-});
+try {
+  await main();
+} catch (error) {
+  console.error(
+    "Setup failed:",
+    error instanceof Error ? error.message : error,
+  );
+  process.exitCode = 1;
+} finally {
+  rl.close();
+}

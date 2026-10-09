@@ -1,0 +1,35 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 3
+    groups:
+      tanstack:
+        patterns: ["@tanstack/*"]
+      oxc:
+        patterns: ["oxlint", "oxlint-*", "oxfmt"]
+      react:
+        patterns:
+          [
+            "react",
+            "react-dom",
+            "@types/react",
+            "@types/react-dom",
+            "babel-plugin-react-compiler",
+          ]
+      vite-and-vitest:
+        patterns: ["vite", "@vitejs/*", "vitest", "@vitest/*", "@rolldown/*"]
+      dev-dependencies:
+        dependency-type: development
+        update-types: ["minor", "patch"]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]

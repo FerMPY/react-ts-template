@@ -1,22 +1,19 @@
 import { Link } from "@tanstack/react-router";
+import { SearchX } from "lucide-react";
+
+import { buttonVariants } from "#/components/ui/button";
 
 export function NotFound() {
   return (
-    <div className="flex h-screen w-screen items-center justify-center bg-gray-900">
-      <div className="rounded-lg bg-gray-800 p-8 shadow-2xl">
-        <h1 className="mb-4 text-3xl font-bold text-yellow-400">
-          404 - Not Found
-        </h1>
-        <p className="mb-6 text-gray-300">
-          The page you are looking for does not exist.
-        </p>
-        <Link
-          to="/"
-          className="rounded bg-blue-500 px-4 py-2 font-bold text-white transition-colors hover:bg-blue-600"
-        >
-          Go Home
-        </Link>
-      </div>
+    <div className="mx-auto flex max-w-xl flex-col items-start gap-4 px-4 py-24">
+      <SearchX aria-hidden className="size-8 text-muted-foreground" />
+      <h1 className="font-heading text-2xl font-semibold">Page not found</h1>
+      <p className="text-muted-foreground">
+        The page you are looking for does not exist.
+      </p>
+      <Link to="/" className={buttonVariants()}>
+        Go home
+      </Link>
     </div>
   );
 }

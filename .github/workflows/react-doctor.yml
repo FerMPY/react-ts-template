@@ -1,0 +1,32 @@
+name: React Doctor
+
+# Reviews each pull request and comments with the React issues it introduces
+# (not the existing backlog). Docs: https://react.doctor/ci
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+  statuses: write
+
+concurrency:
+  group: react-doctor-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  react-doctor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      # Installing first makes the action use the react-doctor version from the lockfile.
+      - uses: ./.github/actions/setup
+      - uses: millionco/react-doctor@v2
+        with:
+          blocking: error

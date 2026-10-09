@@ -13,6 +13,7 @@ Provide a more detailed explanation of the changes, including the context and re
 ## Checklist
 
 - [ ] I have tested these changes thoroughly
+- [ ] `pnpm check` and `pnpm test` pass
 - [ ] I have updated the documentation (if required)
 - [ ] I have followed the project's coding style guidelines
 - [ ] I have added/updated unit tests (if applicable)
