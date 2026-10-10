@@ -63,6 +63,7 @@ export default defineConfig({
     "typescript/no-explicit-any": "warn",
     "typescript/no-misused-promises": "error",
     "typescript/switch-exhaustiveness-check": "error",
+    "typescript/no-deprecated": "warn", // the message names the replacement API
 
     // General
     "eslint/no-unused-vars": [
@@ -73,6 +74,7 @@ export default defineConfig({
     "eslint/eqeqeq": ["error", "smart"],
     "eslint/no-var": "error",
     "eslint/prefer-const": "error",
+    "unicorn/filename-case": ["error", { case: "kebabCase" }],
     "import/no-duplicates": "error",
     "import/no-cycle": "error",
     "import/no-unassigned-import": "off", // CSS and polyfill imports
