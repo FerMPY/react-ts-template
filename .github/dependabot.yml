@@ -12,19 +12,18 @@ updates:
       oxc:
         patterns: ["oxlint", "oxlint-*", "oxfmt"]
       react:
-        patterns:
-          [
-            "react",
-            "react-dom",
-            "@types/react",
-            "@types/react-dom",
-            "babel-plugin-react-compiler",
-          ]
+        patterns: ["react", "react-dom", "@types/react", "@types/react-dom"]
+      # oxc-transform-react must stay in the range @vitejs/plugin-react expects.
       vite-and-vitest:
-        patterns: ["vite", "@vitejs/*", "vitest", "@vitest/*", "@rolldown/*"]
+        patterns:
+          ["vite", "@vitejs/*", "oxc-transform-react", "vitest", "@vitest/*"]
       dev-dependencies:
         dependency-type: development
         update-types: ["minor", "patch"]
+    ignore:
+      # Matches the Node major in .node-version; bump both together.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: github-actions
     directory: /
