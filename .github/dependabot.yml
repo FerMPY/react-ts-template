@@ -25,6 +25,13 @@ updates:
       dev-dependencies:
         dependency-type: development
         update-types: ["minor", "patch"]
+    ignore:
+      # Matches the Node major in .node-version; bump both together.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
+      # Only used to run the React Compiler, which is still built on Babel 7.
+      - dependency-name: "@babel/core"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: github-actions
     directory: /
