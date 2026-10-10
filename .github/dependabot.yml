@@ -13,7 +13,6 @@ updates:
         patterns: ["oxlint", "oxlint-*", "oxfmt"]
       react:
         patterns: ["react", "react-dom", "@types/react", "@types/react-dom"]
-      # oxc-transform-react must stay in the range @vitejs/plugin-react expects.
       vite-and-vitest:
         patterns:
           ["vite", "@vitejs/*", "oxc-transform-react", "vitest", "@vitest/*"]
@@ -24,6 +23,10 @@ updates:
       # Matches the Node major in .node-version; bump both together.
       - dependency-name: "@types/node"
         update-types: ["version-update:semver-major"]
+      # @vitejs/plugin-react pins a 0.x range (e.g. ^0.152.0 allows only 0.152.x).
+      # Bump it by hand when the plugin's peer range moves.
+      - dependency-name: "oxc-transform-react"
+        update-types: ["version-update:semver-minor"]
 
   - package-ecosystem: github-actions
     directory: /

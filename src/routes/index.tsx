@@ -25,6 +25,7 @@ import {
   CardHeader,
   CardTitle,
 } from "#/components/ui/card";
+import { isSpa } from "#/lib/env";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -92,8 +93,6 @@ const stack = [
     link: "https://vitest.dev/",
   },
 ];
-
-const isSpa = import.meta.env.MODE === "spa";
 
 function Home() {
   return (

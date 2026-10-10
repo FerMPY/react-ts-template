@@ -22,6 +22,9 @@ export function SiteHeader() {
         <Link to="/demo" className={navLinkClass}>
           Demo
         </Link>
+        <Link to="/server" className={navLinkClass}>
+          Server
+        </Link>
         <a
           href="https://github.com/FerMPY/react-ts-template"
           target="_blank"
