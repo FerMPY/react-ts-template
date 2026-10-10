@@ -1,29 +1,51 @@
-/// <reference types="vitest/config" />
-import { tanstackRouter } from "@tanstack/router-plugin/vite";
-import react from "@vitejs/plugin-react";
+import { copyFile } from "node:fs/promises";
+
+import babel from "@rolldown/plugin-babel";
+import tailwindcss from "@tailwindcss/vite";
+import { devtools } from "@tanstack/devtools-vite";
+import { tanstackStart } from "@tanstack/react-start/plugin/vite";
+import react, { reactCompilerPreset } from "@vitejs/plugin-react";
+import { nitro } from "nitro/vite";
 import { defineConfig } from "vite";
-import tsconfigPaths from "vite-tsconfig-paths";
 
-const ReactCompilerConfig = {};
+// Two build targets from one codebase:
+//   pnpm build      -> SSR server via Nitro (.output/), run with `pnpm start`
+//   pnpm build:spa  -> static SPA (dist/client/), deploy to any static host
+export default defineConfig(({ mode }) => {
+  // Start prerenders the SPA shell by reloading this file without `--mode`,
+  // so carry the flag over in an env var.
+  if (mode === "spa") process.env.SPA = "true";
+  const isSpa = process.env.SPA === "true";
 
-const isTest = process.env.NODE_ENV === "test";
-
-// https://vite.dev/config/
-export default defineConfig({
-  base: process.env.NODE_ENV === "production" ? "/react-ts-template/" : "/",
-  plugins: [
-    tsconfigPaths(),
-    react({
-      babel: {
-        plugins: [["babel-plugin-react-compiler", ReactCompilerConfig]],
-      },
-    }),
-    !isTest && tanstackRouter(),
-  ],
-  test: {
-    globals: true,
-    isolate: true,
-    environment: "jsdom",
-    setupFiles: "./tests/setup.tsx",
-  },
+  return {
+    // e.g. BASE_PATH=/react-ts-template/ for GitHub Pages. The router basepath is derived from it.
+    base: process.env.BASE_PATH ?? "/",
+    server: { port: 3000 },
+    plugins: [
+      devtools(),
+      !isSpa &&
+        nitro({
+          rolldownConfig: {
+            onLog(level, log, handler) {
+              if (log.code === "MODULE_LEVEL_DIRECTIVE") return;
+              handler(level, log);
+            },
+          },
+        }),
+      tailwindcss(),
+      tanstackStart({
+        spa: {
+          enabled: isSpa,
+          prerender: {
+            // Emit the shell as index.html, and as 404.html so static hosts fall back to it.
+            outputPath: "/index",
+            onSuccess: () =>
+              copyFile("dist/client/index.html", "dist/client/404.html"),
+          },
+        },
+      }),
+      react(),
+      babel({ presets: [reactCompilerPreset()] }),
+    ],
+  };
 });

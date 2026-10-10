@@ -1,49 +1,90 @@
-import React from "react";
-
-import { QueryClient } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { TanStackDevtools } from "@tanstack/react-devtools";
+import type { QueryClient } from "@tanstack/react-query";
+import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import {
+  ClientOnly,
   createRootRouteWithContext,
-  Link,
+  HeadContent,
   Outlet,
+  Scripts,
+  ScriptOnce,
 } from "@tanstack/react-router";
+import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import type { ReactNode } from "react";
 
-const TanStackRouterDevtools =
-  process.env.NODE_ENV === "production"
-    ? () => null // Render nothing in production
-    : React.lazy(() =>
-        // Lazy load in development
-        import("@tanstack/router-devtools").then((res) => ({
-          default: res.TanStackRouterDevtools,
-          // For Embedded Mode
-          // default: res.TanStackRouterDevtoolsPanel
-        })),
-      );
+import { SiteHeader } from "#/components/site-header";
 
-export const Route = createRootRouteWithContext<{
-  queryClient: QueryClient;
-}>()({
-  component: () => (
+import appCss from "#/styles.css?url";
+
+// Follow the OS color scheme before first paint (no flash of the wrong theme).
+const themeScript = `document.documentElement.classList.toggle("dark", matchMedia("(prefers-color-scheme: dark)").matches)`;
+
+export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
+  {
+    head: () => ({
+      meta: [
+        { charSet: "utf-8" },
+        { name: "viewport", content: "width=device-width, initial-scale=1" },
+        { title: "React TS Template" },
+        {
+          name: "description",
+          content:
+            "React 19 + TanStack Start template with SPA and SSR builds, shadcn/ui and the Oxc toolchain.",
+        },
+      ],
+      links: [
+        { rel: "stylesheet", href: appCss },
+        {
+          rel: "icon",
+          type: "image/svg+xml",
+          href: `${import.meta.env.BASE_URL}favicon.svg`,
+        },
+      ],
+    }),
+    shellComponent: RootDocument,
+    component: RootComponent,
+  },
+);
+
+function RootComponent() {
+  const layout = (
     <>
-      <div className="flex h-[60px] gap-4 bg-blue-800 p-4 text-white shadow-md">
-        <Link
-          to="/"
-          className="transition-colors hover:text-blue-200 [&.active]:font-bold"
-        >
-          Home
-        </Link>
-        <Link
-          to="/demo"
-          className="transition-colors hover:text-blue-200 [&.active]:font-bold"
-        >
-          Demo
-        </Link>
-      </div>
-      <main className="h-[calc(100vh-60px)] w-screen bg-gray-900 text-white">
+      <SiteHeader />
+      <main>
         <Outlet />
       </main>
-      <ReactQueryDevtools buttonPosition="top-right" />
-      <TanStackRouterDevtools position="bottom-right" />
     </>
-  ),
-});
+  );
+
+  // The SPA shell is prerendered once at "/" and served for every URL, so render
+  // location-dependent UI only after hydration (see TanStack/router#8473).
+  if (import.meta.env.MODE === "spa") {
+    return <ClientOnly>{layout}</ClientOnly>;
+  }
+  return layout;
+}
+
+function RootDocument({ children }: { children: ReactNode }) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <ScriptOnce>{themeScript}</ScriptOnce>
+        <HeadContent />
+      </head>
+      <body className="min-h-svh">
+        {children}
+        <TanStackDevtools
+          config={{ position: "bottom-right" }}
+          plugins={[
+            {
+              name: "TanStack Router",
+              render: <TanStackRouterDevtoolsPanel />,
+            },
+            { name: "TanStack Query", render: <ReactQueryDevtoolsPanel /> },
+          ]}
+        />
+        <Scripts />
+      </body>
+    </html>
+  );
+}

@@ -1,9 +1,0 @@
-# Add files here to ignore them from prettier formatting
-build
-coverage
-dist
-coverage
-tmp
-node_modules
-/scr/routeTree.gen.ts
-pnpm-lock.yaml

@@ -1,21 +1,20 @@
+import { Skeleton } from "#/components/ui/skeleton";
+
 export function PendingComponent() {
   return (
-    <div className="flex h-screen w-screen items-center justify-center bg-gray-900">
-      <div className="rounded-lg bg-gray-800 p-8 shadow-2xl">
-        <div className="flex flex-col items-center">
-          {/* Loading spinner */}
-          <div className="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-blue-400 border-t-transparent" />
-
-          {/* Pulsing text */}
-          <h2 className="mb-4 animate-pulse text-2xl font-bold text-blue-400">
-            Loading...
-          </h2>
-
-          {/* Loading description */}
-          <p className="mb-6 text-center text-gray-300">
-            Please wait while we fetch your data.
-          </p>
-        </div>
+    <div
+      className="mx-auto flex max-w-5xl flex-col gap-8 px-4 py-16"
+      aria-busy="true"
+      aria-label="Loading"
+    >
+      <div className="flex flex-col gap-3">
+        <Skeleton className="h-9 w-72" />
+        <Skeleton className="h-5 w-full max-w-xl" />
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {Array.from({ length: 6 }, (_, i) => (
+          <Skeleton key={i} className="h-32" />
+        ))}
       </div>
     </div>
   );
