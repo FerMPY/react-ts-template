@@ -13,6 +13,7 @@ import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import type { ReactNode } from "react";
 
 import { SiteHeader } from "#/components/site-header";
+import { isSpa } from "#/lib/env";
 
 import appCss from "#/styles.css?url";
 
@@ -58,7 +59,7 @@ function RootComponent() {
 
   // The SPA shell is prerendered once at "/" and served for every URL, so render
   // location-dependent UI only after hydration (see TanStack/router#8473).
-  if (import.meta.env.MODE === "spa") {
+  if (isSpa) {
     return <ClientOnly>{layout}</ClientOnly>;
   }
   return layout;

@@ -16,8 +16,8 @@
 | Language      | [TypeScript 7](https://www.typescriptlang.org/) (native compiler)                                                                                                                                            |
 | UI            | [Tailwind CSS 4](https://tailwindcss.com/), [shadcn/ui](https://ui.shadcn.com/) on [Base UI](https://base-ui.com/), [Lucide](https://lucide.dev/) icons                                                      |
 | Lint & format | [Oxlint](https://oxc.rs/docs/guide/usage/linter) (type-aware) + [Oxfmt](https://oxc.rs/docs/guide/usage/formatter), [@shadcn/lint](https://github.com/shadcn-ui/lint), [React Doctor](https://react.doctor/) |
-| Tests         | [Vitest 5](https://vitest.dev/), [Testing Library](https://testing-library.com/), jsdom                                                                                                                      |
-| Tooling       | [pnpm](https://pnpm.io/), Husky + lint-staged, GitHub Actions, Dependabot                                                                                                                                    |
+| Tests         | [Vitest 5](https://vitest.dev/) + [Testing Library](https://testing-library.com/), [Playwright](https://playwright.dev/) browser tests for both builds                                                       |
+| Tooling       | [pnpm](https://pnpm.io/), [Knip](https://knip.dev/), Husky + lint-staged, GitHub Actions, Dependabot                                                                                                         |
 
 ## ⚠️ Disclaimer
 
@@ -45,13 +45,13 @@ pnpm dev                # http://localhost:3000
 
 TanStack Start renders on the server by default. Run the same app as a pure client-side SPA with the `spa` mode:
 
-|                  | SSR server (default)                                            | Static SPA                                   |
-| ---------------- | --------------------------------------------------------------- | -------------------------------------------- |
-| Dev              | `pnpm dev`                                                      | `pnpm dev:spa`                               |
-| Build            | `pnpm build` → `.output/`                                       | `pnpm build:spa` → `dist/client/`            |
-| Run / deploy     | `pnpm start`, or any [Nitro preset](https://nitro.build/deploy) | Any static host (GitHub Pages, S3, Netlify…) |
-| Route loaders    | Server on first load, then client                               | Always in the browser                        |
-| Server functions | ✅                                                              | ❌ (no server)                               |
+|                                               | SSR server (default)                                            | Static SPA                                   |
+| --------------------------------------------- | --------------------------------------------------------------- | -------------------------------------------- |
+| Dev                                           | `pnpm dev`                                                      | `pnpm dev:spa`                               |
+| Build                                         | `pnpm build` → `.output/`                                       | `pnpm build:spa` → `dist/client/`            |
+| Run / deploy                                  | `pnpm start`, or any [Nitro preset](https://nitro.build/deploy) | Any static host (GitHub Pages, S3, Netlify…) |
+| Route loaders                                 | Server on first load, then client                               | Always in the browser                        |
+| [Server functions](src/server/server-info.ts) | ✅                                                              | ❌ (no server)                               |
 
 - **Deploy the server** anywhere Nitro supports: `NITRO_PRESET=vercel pnpm build` (or `netlify`, `cloudflare`, `bun`, …). The default `node` preset runs with `pnpm start`.
 - **Deploy the SPA** under a sub-path by setting `BASE_PATH`, e.g. `BASE_PATH=/my-repo/ pnpm build:spa`. The build writes `index.html` plus a `404.html` copy so static hosts fall back to the app for client-side routes.
@@ -59,34 +59,38 @@ TanStack Start renders on the server by default. Run the same app as a pure clie
 
 ## 📜 Scripts
 
-| Command           | Description                                            |
-| ----------------- | ------------------------------------------------------ |
-| `pnpm dev`        | Start the dev server (SSR)                             |
-| `pnpm dev:spa`    | Start the dev server in SPA mode                       |
-| `pnpm build`      | Build the SSR server with Nitro                        |
-| `pnpm build:spa`  | Build the static SPA                                   |
-| `pnpm start`      | Run the SSR build                                      |
-| `pnpm preview`    | Preview the SSR build (`pnpm preview:spa` for the SPA) |
-| `pnpm test`       | Run tests once (`pnpm test:watch` to watch)            |
-| `pnpm check`      | Format check + lint + typecheck, the same as CI        |
-| `pnpm lint`       | Lint with Oxlint (`pnpm lint:fix` to auto-fix)         |
-| `pnpm lint:react` | Scan for React issues with React Doctor                |
-| `pnpm format`     | Format with Oxfmt (`pnpm format:check` to only check)  |
-| `pnpm typecheck`  | Type-check with TypeScript 7                           |
+| Command            | Description                                             |
+| ------------------ | ------------------------------------------------------- |
+| `pnpm dev`         | Start the dev server (SSR)                              |
+| `pnpm dev:spa`     | Start the dev server in SPA mode                        |
+| `pnpm build`       | Build the SSR server with Nitro                         |
+| `pnpm build:spa`   | Build the static SPA                                    |
+| `pnpm start`       | Run the SSR build                                       |
+| `pnpm preview`     | Preview the SSR build (`pnpm preview:spa` for the SPA)  |
+| `pnpm test`        | Run tests once (`pnpm test:watch` to watch)             |
+| `pnpm test:e2e`    | Build both targets and run the Playwright browser tests |
+| `pnpm check`       | Format check, lint, typecheck and unused-code check     |
+| `pnpm lint`        | Lint with Oxlint (`pnpm lint:fix` to auto-fix)          |
+| `pnpm lint:react`  | Scan for React issues with React Doctor                 |
+| `pnpm lint:unused` | Find unused files, exports and dependencies with Knip   |
+| `pnpm format`      | Format with Oxfmt (`pnpm format:check` to only check)   |
+| `pnpm typecheck`   | Type-check with TypeScript 7                            |
 
 ## 🗂️ Project structure
 
 ```
 .
 ├── .github/                # CI, GitHub Pages deploy, React Doctor, Dependabot
+├── e2e/                    # Playwright browser tests for the SSR and SPA builds
 ├── public/                 # Static files, served from BASE_PATH
 ├── scripts/setup.ts        # Turns a clone into your own project
 ├── src/
 │   ├── components/
 │   │   └── ui/             # shadcn/ui components (yours to edit)
-│   ├── lib/utils.ts        # cn() class merging
+│   ├── lib/                # cn() class merging, isSpa flag
 │   ├── queries/            # TanStack Query options
 │   ├── routes/             # File-based routes (__root.tsx is the HTML shell)
+│   ├── server/             # Server functions (SSR build only)
 │   ├── test/               # Test setup and helpers
 │   ├── router.tsx          # Router + QueryClient setup
 │   ├── routeTree.gen.ts    # Generated by TanStack Router, don't edit
@@ -94,8 +98,10 @@ TanStack Start renders on the server by default. Run the same app as a pure clie
 ├── AGENTS.md               # Instructions for coding agents
 ├── components.json         # shadcn/ui config
 ├── doctor.config.ts        # React Doctor config
+├── knip.json               # Unused-code checker config
 ├── oxfmt.config.ts         # Formatter config
 ├── oxlint.config.ts        # Linter config
+├── playwright.config.ts    # Browser test config
 ├── vite.config.ts          # Vite + Start + Nitro (SSR and SPA modes)
 └── vitest.config.ts        # Test config
 ```
@@ -132,6 +138,7 @@ Everything runs on the [Oxc](https://oxc.rs/) toolchain, which is much faster th
 - **TanStack Query and Router** ESLint plugins run inside Oxlint as JS plugins.
 - **Oxfmt** formats code with Prettier-compatible output, and also sorts imports, Tailwind classes and `package.json`.
 - **React Doctor** checks for React anti-patterns, accessibility and security issues (`pnpm lint:react`), and comments on every PR through its GitHub Action.
+- **Knip** finds unused files, exports and dependencies (`pnpm lint:unused`, part of `pnpm check`), the kind of leftovers refactors and coding agents leave behind.
 
 A pre-commit hook (Husky + lint-staged) fixes and formats staged files. In VS Code, install the recommended extensions (Oxc, TypeScript 7 and Tailwind CSS IntelliSense) to get format-on-save and inline lint errors.
 
@@ -156,6 +163,10 @@ it("increments", async () => {
   expect(screen.getByRole("button")).toHaveTextContent("1");
 });
 ```
+
+### Browser tests
+
+`pnpm test:e2e` builds both targets and runs [Playwright](https://playwright.dev/) against each: the SSR server, and the SPA hosted under a sub-path the way GitHub Pages serves it. Every test also fails on console errors, so hydration mismatches and broken deep links get caught. Install the browser once with `pnpm exec playwright install chromium`.
 
 ## 🤖 Working with coding agents
 

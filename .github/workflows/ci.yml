@@ -22,6 +22,7 @@ jobs:
       - run: pnpm format:check
       - run: pnpm lint --deny-warnings
       - run: pnpm typecheck
+      - run: pnpm lint:unused
       - run: pnpm test
 
   build:
@@ -34,3 +35,18 @@ jobs:
       - uses: actions/checkout@v7
       - uses: ./.github/actions/setup
       - run: pnpm ${{ matrix.target == 'spa' && 'build:spa' || 'build' }}
+
+  e2e:
+    name: Browser tests (SSR and SPA)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup
+      - run: pnpm exec playwright install --with-deps --only-shell chromium
+      - run: pnpm test:e2e
+      - if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-traces
+          path: test-results/
+          retention-days: 7

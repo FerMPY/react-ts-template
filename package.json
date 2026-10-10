@@ -17,13 +17,15 @@
     "preview:spa": "vite preview --mode spa",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:e2e": "playwright test",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "lint:react": "react-doctor . --verbose",
+    "lint:unused": "knip",
     "format": "oxfmt",
     "format:check": "oxfmt --check",
     "typecheck": "tsc --noEmit",
-    "check": "oxfmt --check && oxlint --deny-warnings && tsc --noEmit",
+    "check": "oxfmt --check && oxlint --deny-warnings && tsc --noEmit && knip",
     "prepare": "husky"
   },
   "dependencies": {
@@ -40,6 +42,7 @@
     "react-dom": "^19.3.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.0",
     "@shadcn/lint": "^0.2.0",
     "@tailwindcss/vite": "^4.3.3",
     "@tanstack/devtools-vite": "^0.8.5",
@@ -58,6 +61,7 @@
     "@vitejs/plugin-react": "^6.1.2",
     "husky": "^9.1.7",
     "jsdom": "^30.1.2",
+    "knip": "^6.40.0",
     "lint-staged": "^17.6.0",
     "nitro": "3.0.260903-beta",
     "oxc-transform-react": "~0.152.0",

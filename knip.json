@@ -1,0 +1,4 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": ["scripts/*.ts", "doctor.config.ts", "src/components/ui/*.tsx"]
+}

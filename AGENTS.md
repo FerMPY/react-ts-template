@@ -6,8 +6,10 @@ Package manager: pnpm. Node 24.
 ## Commands
 
 - `pnpm dev`: dev server with SSR on http://localhost:3000 (`pnpm dev:spa` for SPA mode)
-- `pnpm check`: format check + lint (type-aware, warnings fail) + typecheck. Run before finishing.
+- `pnpm check`: format check + lint (type-aware, warnings fail) + typecheck + Knip (unused
+  files, exports and dependencies). Run before finishing.
 - `pnpm test`: Vitest. `pnpm test:watch` for watch mode.
+- `pnpm test:e2e`: builds both targets and runs the Playwright browser tests in `e2e/`.
 - `pnpm lint:fix` / `pnpm format`: auto-fix lint issues / format everything
 - `pnpm lint:react`: React Doctor scan (React anti-patterns, a11y, security)
 - `pnpm build` / `pnpm build:spa`: SSR build (`.output/`) / static SPA build (`dist/client/`)
@@ -21,8 +23,9 @@ Package manager: pnpm. Node 24.
   the route `loader`, and read it with `useSuspenseQuery(options)` in the component.
   `ensureQueryData`/`fetchQuery`/`prefetchQuery` are deprecated.
 - The React Compiler is on: don't add `useMemo`, `useCallback` or `memo` for performance.
-- Code must work in both modes. Server functions and server routes only work in the SSR
-  build; in the SPA build everything runs in the browser.
+- Code must work in both modes. Server functions (`createServerFn`, kept in `src/server/`)
+  and server routes only work in the SSR build; check `isSpa` from `#/lib/env` and render a
+  fallback in the SPA build, like `src/routes/server.tsx` does.
 
 ## UI
 
