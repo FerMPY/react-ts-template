@@ -1,10 +1,9 @@
 import { copyFile } from "node:fs/promises";
 
-import babel from "@rolldown/plugin-babel";
 import tailwindcss from "@tailwindcss/vite";
 import { devtools } from "@tanstack/devtools-vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
-import react, { reactCompilerPreset } from "@vitejs/plugin-react";
+import react from "@vitejs/plugin-react";
 import { nitro } from "nitro/vite";
 import { defineConfig } from "vite";
 
@@ -44,8 +43,9 @@ export default defineConfig(({ mode }) => {
           },
         },
       }),
-      react(),
-      babel({ presets: [reactCompilerPreset()] }),
+      // React Compiler via Oxc's native port (oxc-transform-react), no Babel needed.
+      // To use the Babel version instead, see "React Compiler" in the README.
+      react({ compiler: true }),
     ],
   };
 });

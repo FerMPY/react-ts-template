@@ -24,7 +24,7 @@
 This template is meant to stay on the latest versions of everything, which means:
 
 - It may not suit every workflow, since tools get swapped as better ones appear.
-- Some pieces are still young: Oxlint's JS plugins (used for `@shadcn/lint` and the TanStack rules) are in alpha, and Nitro v3 is in beta.
+- Some pieces are still young: the native React Compiler and Oxlint's JS plugins (used for `@shadcn/lint` and the TanStack rules) are experimental, and Nitro v3 is in beta.
 - Every update is tested before landing here, but check the [known issues](#-known-issues) section.
 
 ## 🚀 Getting started
@@ -101,6 +101,27 @@ TanStack Start renders on the server by default. Run the same app as a pure clie
 ```
 
 Import app code with the `#/` alias (`import { Button } from "#/components/ui/button"`). It's a standard [package.json `imports`](https://nodejs.org/api/packages.html#subpath-imports) entry, so Vite, Vitest and Node resolve it without plugins.
+
+## ⚛️ React Compiler
+
+The [React Compiler](https://react.dev/learn/react-compiler) memoizes components and hooks at build time, so you don't need `useMemo`, `useCallback` or `memo` for performance. It runs through [`oxc-transform-react`](https://oxc.rs/blog/2026-08-18-react-compiler-support), Oxc's native port of the compiler, enabled with `react({ compiler: true })` in `vite.config.ts`. It's much faster than the Babel plugin, produces the same output (this template's bundles were byte-identical), and needs no Babel at all.
+
+`@vitejs/plugin-react` still marks the native compiler as experimental. To switch back to the Babel version:
+
+```bash
+pnpm remove oxc-transform-react
+pnpm add -D @rolldown/plugin-babel @babel/core babel-plugin-react-compiler
+```
+
+```ts
+// vite.config.ts
+import babel from "@rolldown/plugin-babel";
+import react, { reactCompilerPreset } from "@vitejs/plugin-react";
+
+// in plugins, replace react({ compiler: true }) with:
+react(),
+babel({ presets: [reactCompilerPreset()] }),
+```
 
 ## 🧹 Linting and formatting
 
