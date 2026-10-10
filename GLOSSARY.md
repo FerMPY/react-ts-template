@@ -1,52 +1,37 @@
 # React TS Template
 
-A React app that ships from one codebase as either a server-rendered app or a static site. Add your own domain's terms here as the app grows.
+A React app that ships from one codebase as a server-rendered app or a static site. Add your own domain's terms as the app grows.
 
 ## Language
 
-### Shipping
-
-**Build target**:
-One of the two ways the app is built and deployed: the **SSR build** or the **SPA build**.
-_Avoid_: mode, flavor, variant
-
 **SSR build**:
-The build target where pages render on a server, arrive as HTML, and then hydrate in the browser.
-_Avoid_: server mode, Nitro build, Node build
+The build where pages render on a server, arrive as HTML, and hydrate in the browser.
+_Avoid_: server mode, Nitro build
 
 **SPA build**:
-The build target with no server, where a static host serves the **Shell** and every page renders in the browser.
-_Avoid_: static mode, client build, CSR build
+The build with no server, where a static host serves the **Shell** and pages render in the browser.
+_Avoid_: static mode, client build, CSR
 
 **Shell**:
-The single HTML document the **SPA build** prerenders and serves for every URL.
-_Avoid_: index page, fallback page, app shell
+The single HTML page the **SPA build** prerenders and serves for every URL.
+_Avoid_: index page, fallback page
 
 **Base path**:
-The URL prefix the **SPA build** is served under, such as the repository name on GitHub Pages.
-_Avoid_: subpath, public path, base URL
+The URL prefix the **SPA build** is served under, such as the repo name on GitHub Pages.
+_Avoid_: subpath, public path
 
 **Server function**:
 Code that runs only in the **SSR build** and is called from the browser like a typed function.
-_Avoid_: API call, RPC, endpoint, action
-
-### Design system
+_Avoid_: API call, RPC, endpoint
 
 **UI component**:
 A shadcn/ui component owned by this repo, which decides its own colors, spacing and typography.
-_Avoid_: design-system component, primitive (reserved for Base UI's unstyled parts), widget
+_Avoid_: design-system component, primitive, widget
 
 **Variant**:
 A named style option a **UI component** offers, such as a button's `outline` look or `sm` size.
-_Avoid_: modifier, theme, override
+_Avoid_: modifier, override
 
 **Theme token**:
-A named color, radius or font defined once for the whole app and used through Tailwind classes like `bg-primary`.
-_Avoid_: design token, CSS variable, theme color
-
-## Relationships
-
-- A **Build target** is either the **SSR build** or the **SPA build**
-- The **SPA build** serves one **Shell** under its **Base path**
-- A **Server function** only exists in the **SSR build**
-- A **UI component** is styled with **Theme tokens** and exposes **Variants**
+A color, radius or font defined once for the app and used through classes like `bg-primary`.
+_Avoid_: design token, CSS variable

@@ -1,16 +1,16 @@
 # AGENTS.md
 
-React 19 + TanStack Start app with two build targets from one codebase: an SSR build (Nitro) and an SPA build (static). pnpm, Node 24.
+React 19 + TanStack Start app with two builds from one codebase: an SSR build (Nitro) and an SPA build (static). pnpm, Node 24.
 
 ## Before finishing a change
 
-Run `pnpm check` (format, type-aware lint, typecheck, unused code) and `pnpm test`. When the change touches routing, rendering or anything that differs between build targets, also run `pnpm test:e2e`. Other scripts are in `package.json`.
+Run `pnpm check` (format, type-aware lint, typecheck, unused code) and `pnpm test`. When the change touches routing, rendering or anything that differs between the two builds, also run `pnpm test:e2e`. Other scripts are in `package.json`.
 
 ## Where to look
 
-- **Vocabulary**: `GLOSSARY.md` defines the project's terms. Use them in code, tests, commits and PRs.
-- **Decisions**: `docs/adr/` explains choices that look surprising, such as the SPA hydration workaround, the Oxc toolchain and the native React Compiler. Read the ones that touch your area, and call out any change that contradicts one.
-- **Standards**: `CODING_STANDARDS.md` holds the conventions reviews check: build targets, data loading, React, UI and tests. Read it before writing code.
+- `GLOSSARY.md`: the project's vocabulary. Use its terms in code, tests, commits and PRs.
+- `docs/adr/`: why the surprising choices were made. Read the ones that touch your change.
+- `CODING_STANDARDS.md`: the conventions reviews check. Read it before writing code.
 
 ## Gotchas
 

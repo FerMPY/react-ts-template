@@ -173,21 +173,13 @@ it("increments", async () => {
 
 ## 🤖 Working with coding agents
 
-The repo follows [Matt Pocock's](https://github.com/mattpocock/skills) layout for project docs, so humans and agents share the same context:
+[`AGENTS.md`](AGENTS.md) is the entry point for agents (`CLAUDE.md` imports it). It points to three short docs, an idea borrowed from [Matt Pocock](https://github.com/mattpocock/skills):
 
-| File                                         | What it's for                                                                                                                           |
-| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| [`AGENTS.md`](AGENTS.md)                     | Short entry point for agents: what to run before finishing, and pointers to the files below. `CLAUDE.md` imports it.                    |
-| [`GLOSSARY.md`](GLOSSARY.md)                 | The project's vocabulary (_SSR build_, _Shell_, _UI component_…), with synonyms to avoid. Add your own domain's terms as the app grows. |
-| [`docs/adr/`](docs/adr/)                     | Architecture decision records: short notes on choices that would otherwise look odd, and why they were made.                            |
-| [`CODING_STANDARDS.md`](CODING_STANDARDS.md) | The judgement calls reviews check. Anything mechanical is a lint rule instead.                                                          |
+- [`GLOSSARY.md`](GLOSSARY.md): the project's vocabulary, with synonyms to avoid. Add your domain's terms as the app grows.
+- [`docs/adr/`](docs/adr/): why the choices that look surprising were made.
+- [`CODING_STANDARDS.md`](CODING_STANDARDS.md): the judgement calls reviews check. Anything mechanical is a lint rule instead.
 
-These work with any agent. With [Matt Pocock's skills](https://github.com/mattpocock/skills) installed (`claude plugin install mattpocock-skills@claude-plugins-official` in Claude Code), run `/setup-matt-pocock-skills` once to connect your issue tracker. After that, `/grill-with-docs` keeps the glossary and ADRs up to date as you plan, and `/code-review` reviews changes against `CODING_STANDARDS.md`.
-
-Tooling closes the loop:
-
-- `@shadcn/lint` and React Doctor are built for agents: they explain how to fix each problem, so agents can correct their own UI and React code by running `pnpm check` and `pnpm lint:react`.
-- Optionally add React Doctor's agent skill with `pnpm dlx react-doctor@latest install`. It also adds a `doctor` script, which collides with pnpm's built-in `pnpm doctor`; use `pnpm lint:react` instead.
+`@shadcn/lint` and React Doctor explain how to fix each problem they find, so agents can correct their own code by running `pnpm check` and `pnpm lint:react`.
 
 ## 🐛 Known issues
 
