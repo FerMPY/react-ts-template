@@ -29,7 +29,7 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@base-ui/react": "^1.8.0",
+    "@base-ui/react": "^1.9.0",
     "@fontsource-variable/geist": "^5.3.0",
     "@tanstack/react-query": "^5.104.1",
     "@tanstack/react-router": "^1.170.41",
