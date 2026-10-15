@@ -10,7 +10,7 @@
 
 | Area          | Tools                                                                                                                                                                                                        |
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Framework     | [React 19](https://react.dev/) + [React Compiler](https://react.dev/learn/react-compiler), [TanStack Start](https://tanstack.com/start) (Router + SSR)                                                       |
+| Framework     | [React 19](https://react.dev/) + [React Compiler](https://react.dev/learn/react-compiler), [TanStack Start 1.0](https://tanstack.com/start) (Router + SSR)                                                   |
 | Data          | [TanStack Query](https://tanstack.com/query), wired into route loaders and SSR hydration                                                                                                                     |
 | Build         | [Vite 8](https://vite.dev/) (Rolldown), [Nitro](https://nitro.build/) for the server build                                                                                                                   |
 | Language      | [TypeScript 7](https://www.typescriptlang.org/) (native compiler)                                                                                                                                            |
