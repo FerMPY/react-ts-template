@@ -37,7 +37,7 @@
     "@tanstack/react-start": "^1.169.1",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.4.0",
-    "lucide-react": "^1.56.0",
+    "lucide-react": "^1.58.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0"
   },
